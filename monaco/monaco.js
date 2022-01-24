@@ -24,10 +24,20 @@ window.MonacoEnvironment = {
   }
 }
 
-window.addEventListener('load', () => {
+const APP_SERVER_HOST = "https://2115-2404-f801-9000-18-950c-5204-5de0-f626.ngrok.io";
+
+window.addEventListener('load', async () => {
+
+  let url = `${APP_SERVER_HOST}/negotiate?id=default`;
+  let res = await fetch(url);
+  let data = await res.json();
+  console.log(data)
+
   const ydoc = new Y.Doc()
-  const provider = new WebsocketProvider('wss://demos.yjs.dev', 'monaco-demo', ydoc)
   const ytext = ydoc.getText('monaco')
+
+  const provider = new WebsocketProvider(data.url, '', ydoc)
+  // const provider = new WebsocketProvider('ws://localhost:1235', 'monaco-demo', ydoc)
 
   const editor = monaco.editor.create(/** @type {HTMLElement} */ (document.getElementById('monaco-editor')), {
     value: '',
